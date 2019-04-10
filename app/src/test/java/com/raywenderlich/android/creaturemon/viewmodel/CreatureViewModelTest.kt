@@ -4,6 +4,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.raywenderlich.android.creaturemon.model.Creature
 import com.raywenderlich.android.creaturemon.model.CreatureAttributes
 import com.raywenderlich.android.creaturemon.model.CreatureGenerator
+import com.raywenderlich.android.creaturemon.model.CreatureRepository
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -23,10 +24,13 @@ class CreatureViewModelTest {
     @Mock
     lateinit var mockGenerator: CreatureGenerator
 
+    @Mock
+    lateinit var repository: CreatureRepository
+
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        creatureViewModel = CreatureViewModel(mockGenerator)
+        creatureViewModel = CreatureViewModel(mockGenerator, repository)
     }
 
     @Test
@@ -42,5 +46,18 @@ class CreatureViewModelTest {
         creatureViewModel.updateCreature()
 
         assertEquals(stubCreature, creatureViewModel.creature)
+    }
+
+    @Test
+    fun testCantSaveCreatureWithBlankName() {
+        creatureViewModel.apply {
+            intelligence = 10
+            strength = 3
+            endurance = 7
+            drawable = 1
+            name = ""
+        }
+        val canSaveCreature = creatureViewModel.canSaveCreature()
+        assertEquals(false, canSaveCreature)
     }
 }

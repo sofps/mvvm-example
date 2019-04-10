@@ -60,4 +60,30 @@ class CreatureViewModelTest {
         val canSaveCreature = creatureViewModel.canSaveCreature()
         assertEquals(false, canSaveCreature)
     }
+
+    @Test
+    fun testCantSaveCreatureWithoutStrength() {
+        creatureViewModel.apply {
+            intelligence = 10
+            strength = 0
+            endurance = 7
+            drawable = 1
+            name = "Test Creature"
+        }
+        val canSaveCreature = creatureViewModel.canSaveCreature()
+        assertEquals(false, canSaveCreature)
+    }
+
+    @Test
+    fun testCantSaveCreatureWithoutIntelligence() {
+        creatureViewModel.apply {
+            intelligence = 0
+            strength = 3
+            endurance = 7
+            drawable = 1
+            name = "Test Creature"
+        }
+        val canSaveCreature = creatureViewModel.canSaveCreature()
+        assertEquals(false, canSaveCreature)
+    }
 }

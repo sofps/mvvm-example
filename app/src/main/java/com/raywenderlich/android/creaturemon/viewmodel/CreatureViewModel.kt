@@ -3,6 +3,7 @@ package com.raywenderlich.android.creaturemon.viewmodel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.MutableBoolean
 import com.raywenderlich.android.creaturemon.model.*
 import com.raywenderlich.android.creaturemon.model.room.RoomRepository
 
@@ -11,7 +12,11 @@ class CreatureViewModel(private val generator: CreatureGenerator = CreatureGener
 
     private val creatureLiveData = MutableLiveData<Creature>()
 
+    private val saveLiveData = MutableLiveData<Boolean>()
+
     fun getCreatureLiveData(): LiveData<Creature> = creatureLiveData
+
+    fun getSaveLiveData(): LiveData<Boolean> = saveLiveData
 
     var name = ""
     var intelligence = 0
@@ -44,12 +49,12 @@ class CreatureViewModel(private val generator: CreatureGenerator = CreatureGener
         updateCreature()
     }
 
-    fun saveCreature(): Boolean {
-        return if (canSaveCreature()) {
+    fun saveCreature() {
+        if (canSaveCreature()) {
             repository.saveCreature(creature)
-            true
+            saveLiveData.postValue(true)
         } else {
-            false
+            saveLiveData.postValue(false)
         }
     }
 

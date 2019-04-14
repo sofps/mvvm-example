@@ -55,7 +55,7 @@ class CreatureViewModelTest {
             strength = 3
             endurance = 7
             drawable = 1
-            name = ""
+            name.set("")
         }
         val canSaveCreature = creatureViewModel.canSaveCreature()
         assertEquals(false, canSaveCreature)
@@ -68,7 +68,7 @@ class CreatureViewModelTest {
             strength = 0
             endurance = 7
             drawable = 1
-            name = "Test Creature"
+            name.set("Test Creature")
         }
         val canSaveCreature = creatureViewModel.canSaveCreature()
         assertEquals(false, canSaveCreature)
@@ -81,7 +81,7 @@ class CreatureViewModelTest {
             strength = 3
             endurance = 7
             drawable = 1
-            name = "Test Creature"
+            name.set("Test Creature")
         }
         val canSaveCreature = creatureViewModel.canSaveCreature()
         assertEquals(false, canSaveCreature)

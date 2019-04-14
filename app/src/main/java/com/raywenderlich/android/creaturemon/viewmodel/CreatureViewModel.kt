@@ -3,6 +3,7 @@ package com.raywenderlich.android.creaturemon.viewmodel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.databinding.ObservableField
 import android.util.MutableBoolean
 import com.raywenderlich.android.creaturemon.model.*
 import com.raywenderlich.android.creaturemon.model.room.RoomRepository
@@ -18,7 +19,7 @@ class CreatureViewModel(private val generator: CreatureGenerator = CreatureGener
 
     fun getSaveLiveData(): LiveData<Boolean> = saveLiveData
 
-    var name = ""
+    var name = ObservableField<String>("")
     var intelligence = 0
     var strength = 0
     var endurance = 0
@@ -28,7 +29,7 @@ class CreatureViewModel(private val generator: CreatureGenerator = CreatureGener
 
     fun updateCreature() {
         val attributes = CreatureAttributes(intelligence, strength, endurance)
-        creature = generator.generateCreature(attributes, name, drawable)
+        creature = generator.generateCreature(attributes, name.get() ?: "", drawable)
         creatureLiveData.postValue(creature)
     }
 
@@ -59,7 +60,10 @@ class CreatureViewModel(private val generator: CreatureGenerator = CreatureGener
     }
 
     fun canSaveCreature(): Boolean {
-        return intelligence != 0 && strength != 0 && endurance != 0 && name.isNotEmpty() && drawable != 0
+        val name = this.name.get()
+        return name?.let {
+            intelligence != 0 && strength != 0 && endurance != 0 && name.isNotEmpty() && drawable != 0
+        } ?: false
     }
 
 }
